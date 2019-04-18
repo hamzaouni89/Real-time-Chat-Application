@@ -1,0 +1,14 @@
+<div class="header-nav bg-info">
+    <div *ngIf="!token">
+        <a [routerLink]="['/user/login']" routerLinkActive="active" class="text-white ajaxload-popup"><i
+            class="fas fa-sign-in-alt"></i> Login </a> /
+        <a [routerLink]="['/user/register']" routerLinkActive="active" class="text-white ajaxload-popup"><i
+            class="fas fa-user-plus"></i>Register</a>
+    </div>
+<div class="container">
+<div class="row">
+  <div class="col-sm-7">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+</div>
