@@ -1,22 +1,61 @@
-<div class="container-fluid">
-    <div class="row">
-        <h2>Realtime Chat Application</h2>
-        <hr>
-    </div>
 
-    <div class="row">
-        <div class="well" style="height:200px; padding:15px;">
-            <div *ngFor="let item of messageArray">
-            <span><strong>{{item.user}} : </strong> {{item.message}}</span>
+<div class="flash-messages">
+    <!-- <flash-messages></flash-messages> -->
+  </div>
+  <router-outlet></router-outlet>
+
+
+   
+      <div class="card-body">
+  <div class="container">
+      <div class="card">
+          <h5 class="card-header">Liste des candidats disponibles</h5>
+          <div class="card-body">
+
+      <table class="table table-hover">
+        <tbody>
+          <tr *ngFor="let user of Users">
+            <td *ngIf="user._id !== userService.connectedUser._id">{{ user.nom }} {{ user.prenom }}</td>
+            <td *ngIf="user._id !== userService.connectedUser._id"> <button data-toggle="modal" (click)="findConversation(user._id);getUserMessage(user._id)" data-target="#sideModalTR"
+                class="btn btn-success button">Chat</button></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      </div>
+    </div>
+     <div class="modal fade right" id="sideModalTR" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog  messagedialog modal-side modal-bottom-left" role="document">
+        <div class="modal-content">
+          <div class="modal-header" >
+            <h4 class="modal-title w-100" id="myModalLabel" >  {{userMessage?.nom}} {{userMessage?.prenom}}</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body messagebody">
+            <div *ngFor="let msg of privateMessage?.messages">
+                <div class="row justify-content-end" *ngIf="msg?.from === token.candidat">
+                  <div class="col-md-5 margin-btn">
+                    <p class="speech-bubble">{{msg?.contenu}}</p>
+                  </div>
+                </div>
+                <div class="row" *ngIf="msg?.to === token.candidat">
+                  <div  class="col-md-4 margin-btn">
+                    <p class="speech-bubble2">{{msg?.contenu}}</p>
+                  </div>
+                </div>
             </div>
+          </div>
+    
+          <div class="modal-footer">
+              <form [formGroup]="messageSend">
+                  <div class="form-group">
+                      <textarea formControlName="contenu" class="example-form" matInput placeholder="new Message"></textarea>
+                      <button [disabled]="messageSend.invalid" (click)="sendMessage(userMessage._id)" color="primary">Send</button>
+                  </div>
+              </form>
+          </div> 
         </div>
+      </div>
     </div>
-    <div class="row">
-        <div class="col-sm-10">
-            <input type="text" class="form-control" [(ngModel)]="messageText">            
-        </div>
-        <div class="col-sm-2">
-                <button type="button" class="btn btn-success pull-right" (click)="sendMessage()">Send</button>
-        </div>
-    </div>
-</div>

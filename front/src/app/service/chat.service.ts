@@ -1,59 +1,28 @@
 import { Injectable } from '@angular/core';
-import * as io from 'socket.io-client';
-import { Observable } from 'rxjs/Observable';
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Socket } from 'ngx-socket-io';
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-  // private socket = io('http://localhost:4200');
-  constructor() { }
+  privateMessage: any;
+  constructor(public http: HttpClient, private socket: Socket) {
 
-  // joinRoom(data)
-  // {
-  //     this.socket.emit('join',data);
-  // }
+  }
 
-  // newUserJoined()
-  // {
-  //     let observable = new Observable<{user:String, message:String}>(observer=>{
-  //         this.socket.on('new user joined', (data)=>{
-  //             observer.next(data);
-  //         });
-  //         return () => {this.socket.disconnect();}
-  //     });
-
-  //     return observable;
-  // }
-
-  // leaveRoom(data){
-  //     this.socket.emit('leave',data);
-  // }
-
-  // userLeftRoom(){
-  //     let observable = new Observable<{user:String, message:String}>(observer=>{
-  //         this.socket.on('left room', (data)=>{
-  //             observer.next(data);
-  //         });
-  //         return () => {this.socket.disconnect();}
-  //     });
-
-  //     return observable;
-  // }
-
-  // sendMessage(data)
-  // {
-  //     this.socket.emit('message',data);
-  // }
-
-  // newMessageReceived(){
-  //     let observable = new Observable<{user:String, message:String}>(observer=>{
-  //         this.socket.on('new message', (data)=>{
-  //             observer.next(data);
-  //         });
-  //         return () => {this.socket.disconnect();}
-  //     });
-
-  //     return observable;
-  // }
+  sendMessage(form) {
+    return this.http.post('http://localhost:3000/conversations/message', form);
+  }
+  getConversation(id) {
+    return this.http.get(`http://localhost:3000/conversations/message/${id}`);
+  }
+  getUserConversation( index) {
+    return this.http.get(`http://localhost:3000/conversations/message/user/${index}`);
+  }
+  getPrivateConvertion(id, form) {
+   return this.http.post(`http://localhost:3000/conversations/conversation/${id}/${form}`,null);
+  }
+  getprivateMessageSocket() {
+    return this.socket.fromEvent('privateMessage');
+  }
 }

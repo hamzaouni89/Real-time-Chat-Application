@@ -10,6 +10,7 @@ export class UserService {
   connectedUser: any;
   constructor(private http: HttpClient, private router: Router) {
     this.connectedUser = this.getDecodedToken();
+    
    }
 
    setToken(token: string): void {
@@ -30,5 +31,13 @@ getUser() {
 }
 register(user) {
   return this.http.post('http://localhost:3000/users/register', user)
+}
+getUsers() {
+  let header = new HttpHeaders().append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+  return this.http.get('http://localhost:3000/users/getUsers', { headers: header });
+}
+getUserById(ID) {
+  let header = new HttpHeaders().append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+  return this.http.get(`http://localhost:3000/users/getUserById/${ID}`, { headers: header });
 }
 }

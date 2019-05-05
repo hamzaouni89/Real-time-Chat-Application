@@ -22,10 +22,10 @@
     "@angular/router": "~7.2.0",
     "core-js": "^2.5.4",
     "jwt-decode": "^2.2.0",
+    "ngx-socket-io": "^2.1.1",
     "rxjs": "~6.3.3",
     "rxjs-compat": "^6.4.0",
     "rxjs-observable": "0.0.7",
-    "socket.io-client": "^2.0.4",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },

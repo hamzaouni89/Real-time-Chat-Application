@@ -21,11 +21,11 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
   moveToLogin(){
-    this.router.navigate(['/login']);
+    this.router.navigate(['/user/login']);
   }
   register() {
     this.userService.register(this.registerForm.value).subscribe((res) => {
-      this.router.navigateByUrl('/login')
+      this.router.navigateByUrl('/user/login')
     });
   }
 

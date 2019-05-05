@@ -3,8 +3,7 @@ var bcrypt = require('bcrypt')
 var jwt = require('jsonwebtoken')
 var User = require('../model/users')
 var router = express.Router();
-
-
+var passport = require('passport');
 const JWT_SIGN_SECRET = 'KJN4511qkqhxq5585x5s85f8f2x8ww8w55x8s52q5w2q2'
 router.post('/login', function (req, res, next) {
     var password = req.body.password
@@ -91,6 +90,29 @@ router.get('/getUser', function (req, res, next) {
             res.send(err)
         } else {
             res.send(users)
+        }
+    })
+})
+router.get('/getUsers', passport.authenticate('bearer', {
+    session: false
+}), (req, res, next) => {
+    User.find().exec((err, users) => {
+        if (err) {
+            res.send(err);
+        }
+        res.send(users);
+    });
+});
+router.get('/getUserById/:id', passport.authenticate('bearer', {
+    session: false
+}), function (req, res, next) {
+    User.findById({
+        _id: req.params.id
+    }).exec(function (err, user) {
+        if (err) {
+            res.send(err)
+        } else {
+            res.send(user)
         }
     })
 })
