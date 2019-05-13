@@ -1,61 +1,71 @@
-
 <div class="flash-messages">
-    <!-- <flash-messages></flash-messages> -->
-  </div>
-  <router-outlet></router-outlet>
+</div>
+<router-outlet></router-outlet>
 
-
-   
-      <div class="card-body">
+<div class="card-body">
   <div class="container">
-      <div class="card">
-          <h5 class="card-header">Liste des candidats disponibles</h5>
-          <div class="card-body">
+    <div class="card">
+      <h5 class="card-header">Liste des utilisateurs disponibles</h5>
+      <div class="card-body">
 
-      <table class="table table-hover">
-        <tbody>
-          <tr *ngFor="let user of Users">
-            <td *ngIf="user._id !== userService.connectedUser._id">{{ user.nom }} {{ user.prenom }}</td>
-            <td *ngIf="user._id !== userService.connectedUser._id"> <button data-toggle="modal" (click)="findConversation(user._id);getUserMessage(user._id)" data-target="#sideModalTR"
-                class="btn btn-success button">Chat</button></td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
+        <table class="table table-hover">
+          <tbody>
+            <tr *ngFor="let user of Users">
+              <td *ngIf="user._id !== userService.connectedUser._id"><img class="photo"
+                  src="http://localhost:3000/users/getImage/{{user.image}}" alt="Card image cap"></td>
+              <td *ngIf="user._id !== userService.connectedUser._id">{{ user.nom }} {{ user.prenom }}</td>
+              <td *ngIf="user._id !== userService.connectedUser._id"> <button data-toggle="modal"
+                  (click)="findConversation(user._id);getUserMessage(user._id)" data-target="#sideModalTR"
+                  class="btn btn-success button">Chat</button></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-     <div class="modal fade right" id="sideModalTR" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog  messagedialog modal-side modal-bottom-left" role="document">
-        <div class="modal-content">
-          <div class="modal-header" >
-            <h4 class="modal-title w-100" id="myModalLabel" >  {{userMessage?.nom}} {{userMessage?.prenom}}</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body messagebody">
-            <div *ngFor="let msg of privateMessage?.messages">
-                <div class="row justify-content-end" *ngIf="msg?.from === token.candidat">
-                  <div class="col-md-5 margin-btn">
-                    <p class="speech-bubble">{{msg?.contenu}}</p>
-                  </div>
-                </div>
-                <div class="row" *ngIf="msg?.to === token.candidat">
-                  <div  class="col-md-4 margin-btn">
-                    <p class="speech-bubble2">{{msg?.contenu}}</p>
-                  </div>
-                </div>
+  </div>
+  <div class="modal fade right" id="sideModalTR" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog  messagedialog modal-side modal-bottom-left" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          
+            <div class="col-md-4">
+              <img class="photo" src="http://localhost:3000/users/getImage/{{userMessage?.image}}" alt="Card image cap">
+            </div>
+            <div class="col-md-6">
+              <h4 class="modal-title w-100" id="myModalLabel"> {{userMessage?.nom}} {{userMessage?.prenom}}</h4>
+            </div>
+            <div class="col-md-2">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+         
+        </div>
+        <div class="modal-body messagebody">
+          <div *ngFor="let msg of privateMessage?.messages">
+            <div class="row justify-content-end" *ngIf="msg?.from === token._id">
+              <div class="col-md-5 margin-btn">
+                <p class="speech-bubble">{{msg?.contenu}}</p>
+              </div>
+            </div>
+            <div class="row" *ngIf="msg?.to === token._id">
+              <div class="col-md-4 margin-btn">
+                <p class="speech-bubble2">{{msg?.contenu}}</p>
+              </div>
             </div>
           </div>
-    
-          <div class="modal-footer">
-              <form [formGroup]="messageSend">
-                  <div class="form-group">
-                      <textarea formControlName="contenu" class="example-form" matInput placeholder="new Message"></textarea>
-                      <button [disabled]="messageSend.invalid" (click)="sendMessage(userMessage._id)" color="primary">Send</button>
-                  </div>
-              </form>
-          </div> 
+        </div>
+
+        <div class="modal-footer">
+          <form [formGroup]="messageSend">
+            <div class="form-group">
+              <textarea formControlName="contenu" class="example-form" matInput placeholder="new Message"></textarea>
+              <button [disabled]="messageSend.invalid" (click)="sendMessage(userMessage._id)"
+              class="btn btn-info button">Send</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+  </div>

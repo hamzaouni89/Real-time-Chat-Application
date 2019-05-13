@@ -1,10 +1,36 @@
 var express = require('express')
 var bcrypt = require('bcrypt')
 var jwt = require('jsonwebtoken')
-var User = require('../model/users')
 var router = express.Router();
 var passport = require('passport');
 const JWT_SIGN_SECRET = 'KJN4511qkqhxq5585x5s85f8f2x8ww8w55x8s52q5w2q2'
+var multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+
+});
+
+const upload = multer({storage:storage});
+var User = require('../model/users')
+router.post('/upload', upload.single("image"), function (req, res, next) {
+    console.log(req.params.image);
+    
+    if (!req.image) {
+        console.log("No image received");
+         res.send({success: false});
+    } else {
+        console.log('image received');
+         res.send(req.image)
+    }
+})
+router.get('/getImage/:name', function (req, res, next) {
+    res.sendFile('C:/Users/houni/OneDrive/Bureau/Formation/FBL/uploads/' + req.params.name);
+})
 router.post('/login', function (req, res, next) {
     var password = req.body.password
     var email = req.body.email 
@@ -13,7 +39,8 @@ router.post('/login', function (req, res, next) {
             'error': 'missing parametres'
         })
     }
-    User.findOne({ "email": email }).exec(function (err, userfound) {
+    User.findOne({ email: email }).exec(function (err, userfound) {
+
         if (userfound) {
             bcrypt.compare(password, userfound.password, function (err, resBycrypt) {
                 if (resBycrypt) {
@@ -22,6 +49,7 @@ router.post('/login', function (req, res, next) {
                         '_id': userfound._id,
                         'email': userfound.email,
                         'nom': userfound.nom,
+                        'image' : userfound.image,
                         'prenom': userfound.prenom,
                     },
                         JWT_SIGN_SECRET, {
@@ -58,27 +86,31 @@ router.post('/register', function (req, res) {
                         nom: req.body.nom,
                         prenom: req.body.prenom,
                         email: req.body.email,
-                        password: bcryptedPassword,
-                        
+                        image : req.body.image,
+                        password: bcryptedPassword,          
                     });
-                    newUser.save().then(function  (newUser) {
-                        res.status(201).send({
-                            'message': "Candidat ajoutée",
-                            '_id': newUser._id
-                         })
-                        })
-                        .catch(function (err) {
-                            res.status(500).send(err)
-                        })
+
+                    newUser.save(function(err, newUser){
+                        if(err) {
+                            res.send(err)
+                        }
+                        else{                         
+                            res.send({
+                                'message': "Candidat ajoutée",
+                                '_id': newUser._id
+                            })
+                        }        
+                    })
                 })
-            } else {
-                res.status(409).send({
+            }
+          else {
+                res.send({
                     'error': 'user already exsit'
                 })
             }
         })
         .catch(function (err) {
-            res.status(500).send({
+            res.send({
                 'error': 'unable to verify user'
             })
         });

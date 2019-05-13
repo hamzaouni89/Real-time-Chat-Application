@@ -6,6 +6,7 @@ var usersSchema = new mongoose.Schema({
 
     nom:  String,
     prenom: String,
+    image : String,
     email: {
         type: String,
         Required: true, trim: true, minlength: 1, unique: true,

@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   userMessage: any;
   messageSend: FormGroup;
   u;
+  image: File;
   constructor(
     private chatService: ChatService,
     private userService: UserService,) {
@@ -48,6 +49,8 @@ export class HomeComponent implements OnInit {
   }
   
   getConversation() {
+
+    
     this.chatService.getConversation(this.token._id).subscribe(res => {
       this.allUser = res;
       for (let i = 0; i < this.allUser.length; i++) {
@@ -69,12 +72,12 @@ export class HomeComponent implements OnInit {
   }
   sendMessage(f) {   
       this.schemaMessage = {
-        user1 : this.token.candidat,
+        user1 : this.token._id,
         user2 : f,
         messages : [{
           contenu : this.messageSend.value.contenu,
           date : Date.now(),
-          from : this.token.candidat,
+          from : this.token._id,
           to: f
         }]
       };
@@ -95,5 +98,19 @@ export class HomeComponent implements OnInit {
     this.userService.getUserById(f).subscribe(res => {
       this.userMessage = res;
     });
+  }
+getUsers(){
+  this.userService.getUsers().subscribe(users => {
+    this.Users = users ;
+  });
+}
+  getImage(image) {
+    this.userService.getImage(image).subscribe((res) => {
+      return this.getUsers();
+    })
+  }
+  UpdateImage(event) {
+    console.log(event[0])
+    this.image = event[0]
   }
 }
