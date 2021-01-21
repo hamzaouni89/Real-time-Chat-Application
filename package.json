@@ -26,7 +26,7 @@
     "npm": "^6.10.3",
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.4.0",
     "validator": "^10.11.0"
   }
 }
